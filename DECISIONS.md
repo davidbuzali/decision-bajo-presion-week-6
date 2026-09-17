@@ -232,3 +232,30 @@ Start Feature 6 only: implement explicit bounded voice activation as an adapter 
 ### Tomorrow's first move
 
 Start Feature 7 only: render exactly one approved comparison statement for the targeted behavior, show the immutable **Pendiente de validación física** gate and physical micro-drill instruction, then add the complete-flow M05/M06/M12/M13 assertions.
+
+## 2026-09-16 — Feature 7 session close
+
+### Decisions made
+
+- Derive the final comparison only when the selected unseen retest contains its complete allow-listed event sequence; an incomplete or invalid phase cannot render a result.
+- Compare only the adaptive target behavior against validated baseline and retest events with the existing pure domain function.
+- Render exactly one of the three approved Spanish evidence statements and no score, probability, readiness rating, or generalized competence claim.
+- Keep **Pendiente de validación física** visible for every result and instruct the human safety lead to observe the target behavior in a physical micro-drill.
+- Make Screen 5 read-only: it contains no button, checkbox, override, approval, certification, competence, or finding-closure control.
+- Explain that the evidence is held only in memory and that reloading returns to the safe start screen with no retained result.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 67 tests passed across 11 files.
+- Strict TypeScript build: passed.
+- Vite production build: passed; the existing lazy Three.js chunk remains the only bundle-size warning.
+- M05 covers all three evidence outcomes at both the pure comparison and rendered-screen levels.
+- M06 confirms that `physicalValidation` remains the literal type and runtime value `"pending"`, and the UI exposes no closure control.
+- M12 completes baseline → neutral trace → human debrief → different retest → comparison and finds the physical-validation gate.
+- M13 remounts the application after a completed comparison and confirms that the start screen returns with no evidence statement or result.
+- Browser QA: the complete flat-view route journey rendered the expected after-debrief statement and physical gate at desktop and 390 × 844; a real reload returned to clean defaults, and the console contained no errors or warnings.
+
+### Next move
+
+Run the pre-deployment security and quality floor, document M01–M15 evidence, then create and verify Deployment 1 on Vercel before beginning the required real defect and persona test-fix cycle.

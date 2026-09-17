@@ -1,11 +1,13 @@
 import { useReducer, useRef } from "react";
 import { BaselineRehearsal } from "../components/BaselineRehearsal";
+import { ComparisonScreen } from "../components/ComparisonScreen";
 import { PauseOverlay } from "../components/PauseOverlay";
 import { ScenarioRehearsal } from "../components/ScenarioRehearsal";
 import { StartScreen } from "../components/StartScreen";
 import { TraceDebrief } from "../components/TraceDebrief";
 import { createDecisionEvent } from "../domain/actions";
 import { selectRetestScenario } from "../domain/adaptive";
+import { compareBehavior } from "../domain/comparison";
 import { BASELINE_SCENARIO } from "../domain/scenarios";
 import {
   BASELINE_DECISION_IDS,
@@ -42,6 +44,15 @@ export function App() {
         (event) => event.scenarioId === adaptiveSelection.scenario.id,
       )
     : [];
+  const comparisonResult =
+    adaptiveSelection &&
+    retestEvents.length === adaptiveSelection.scenario.decisions.length
+      ? compareBehavior({
+          behaviorCode: adaptiveSelection.behaviorCode,
+          baselineEvents,
+          retestEvents,
+        })
+      : null;
 
   function startSession() {
     startedAtRef.current = performance.now();
@@ -117,7 +128,7 @@ export function App() {
           : session.phase === "retest"
             ? "Retest no visto en curso"
             : session.phase === "comparison"
-              ? "Retest no visto completado"
+              ? "Comparación disponible; validación física pendiente"
               : "Ensayo iniciado";
 
   return (
@@ -209,21 +220,12 @@ export function App() {
             )
           }
         />
-      ) : session.phase === "comparison" ? (
-        <main id="main-content" className="session-page">
-          <section className="session-placeholder" aria-labelledby="session-title">
-            <div className="session-meta">
-              <span>Paso 5 de 5</span>
-              <span>Retest no visto completado</span>
-            </div>
-            <p className="eyebrow">Decisión registrada</p>
-            <h1 id="session-title">Comparación preparada</h1>
-            <p>
-              La evidencia del escenario inicial y del retest está en memoria. La
-              comparación y la validación física se incorporarán en Feature 7.
-            </p>
-          </section>
-        </main>
+      ) : session.phase === "comparison" && comparisonResult ? (
+        <ComparisonScreen
+          result={comparisonResult}
+          baselineEventCount={baselineEvents.length}
+          retestEventCount={retestEvents.length}
+        />
       ) : (
         <main id="main-content" className="session-page">
           <p>Esta fase todavía no está disponible.</p>

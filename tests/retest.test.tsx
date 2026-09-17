@@ -102,9 +102,17 @@ describe("Feature 5 adaptive unseen retest", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "Comparación preparada" }),
+      screen.getByRole("heading", {
+        name: "Lo observado en las dos simulaciones",
+      }),
     ).toBeVisible();
-    expect(screen.getAllByText("Retest no visto completado")).toHaveLength(2);
+    expect(screen.getByText("Retest no visto completado")).toBeVisible();
+    expect(
+      screen.getByText(
+        "Demostrado después del debrief en el retest no visto",
+      ),
+    ).toBeVisible();
+    expect(screen.getByText("Pendiente de validación física")).toBeVisible();
     expect(screen.queryByRole("button", { name: /Pausar y salir/i })).toBeNull();
   });
 

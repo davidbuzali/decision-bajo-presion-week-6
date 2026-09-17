@@ -1086,6 +1086,202 @@ a:focus-visible {
   font-size: 0.72rem;
 }
 
+.comparison-page {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5.5rem) 0;
+}
+
+.comparison-heading {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.comparison-heading > div {
+  max-width: 770px;
+}
+
+.comparison-heading h1 {
+  margin: 0.4rem 0 0.8rem;
+  font-size: clamp(2.2rem, 5vw, 4.7rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.comparison-heading > div > p:last-child {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.comparison-status {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  color: var(--teal-dark);
+  background: var(--teal-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.comparison-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.72fr);
+  align-items: stretch;
+  gap: 1.25rem;
+}
+
+.evidence-result-card,
+.validation-gate {
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+  border-radius: 1.4rem;
+  box-shadow: 0 1rem 3rem rgb(20 33 61 / 8%);
+}
+
+.evidence-result-card {
+  border: 1px solid #a7d0ca;
+  background: linear-gradient(145deg, #effaf7, white 68%);
+}
+
+.evidence-result-card h2 {
+  margin: 0.4rem 0 0;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  letter-spacing: -0.04em;
+}
+
+.evidence-statement {
+  margin-top: 1.5rem;
+  padding: clamp(1rem, 3vw, 1.4rem);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  border: 1px solid #8dc7bf;
+  border-radius: 1rem;
+  background: white;
+}
+
+.evidence-statement span {
+  color: var(--teal);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.evidence-statement p {
+  margin: 0;
+  color: var(--navy);
+  font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.evidence-summary {
+  margin: 1.4rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.evidence-summary div {
+  padding: 0.9rem;
+  border-radius: 0.8rem;
+  background: rgb(255 255 255 / 75%);
+}
+
+.evidence-summary dt,
+.evidence-summary dd {
+  margin: 0;
+}
+
+.evidence-summary dt {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.evidence-summary dd {
+  margin-top: 0.3rem;
+  color: #334154;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.evidence-boundary {
+  margin: 1.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.validation-gate {
+  border: 1px solid #dfb861;
+  color: #4c3914;
+  background: linear-gradient(150deg, #fff9eb, var(--amber-soft));
+}
+
+.validation-kicker {
+  margin: 0;
+  color: #76530f;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.validation-state {
+  margin-top: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.validation-state > span {
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: #9a6810;
+  font-weight: 900;
+}
+
+.validation-state strong {
+  font-size: clamp(1.45rem, 3vw, 2.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.validation-gate > p:not(.validation-kicker) {
+  margin: 1.25rem 0 0;
+  line-height: 1.65;
+}
+
+.validation-note {
+  margin-top: 1.4rem;
+  padding: 1rem;
+  border-left: 0.25rem solid #9a6810;
+  background: rgb(255 255 255 / 58%);
+}
+
+.validation-note strong,
+.validation-note span {
+  display: block;
+}
+
+.validation-note span {
+  margin-top: 0.35rem;
+  color: #6b5529;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
 [data-motion="reduced"] *,
 [data-motion="reduced"] *::before,
 [data-motion="reduced"] *::after {
@@ -1162,6 +1358,15 @@ a:focus-visible {
   .trace-layout {
     grid-template-columns: 1fr;
   }
+
+  .comparison-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .comparison-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -1192,6 +1397,10 @@ a:focus-visible {
 
   .voice-control small {
     grid-column: auto;
+  }
+
+  .evidence-summary {
+    grid-template-columns: 1fr;
   }
 }
 

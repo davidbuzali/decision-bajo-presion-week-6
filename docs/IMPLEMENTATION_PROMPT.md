@@ -108,7 +108,7 @@ Do not add accounts, personal profiles, Supabase, persistent cloud data, student
 
 Do not combine these milestones:
 
-1. `docs: define behavior-measurement rehearsal packet`
+1. `docs: define measurement-vacuum rehearsal packet`
 2. `feat: scaffold accessible 3d baseline rehearsal`
 3. `feat: add observable event trace and human debrief`
 4. `feat: add adaptive unseen retest and bounded voice input`
@@ -126,4 +126,3 @@ Deploy once after milestone 5. Run the mechanical and persona passes, fix the hi
 - Mechanical and persona tests are documented, including one bug and one implemented usability fix.
 - At least five meaningful commits and two verified deployments exist.
 - `DECISIONS.md` includes the final session close and the next first move.
-

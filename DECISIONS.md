@@ -66,3 +66,30 @@ Synchronize `docs/IMPLEMENTATION_PROMPT.md` with the finalized packet, divide th
 ### Tomorrow's first move
 
 Start Feature 1 only: scaffold the Vite/React/TypeScript project, add the pure domain contracts and fixtures, implement M01–M07, run lint/tests/build, then commit and push that coherent increment before creating the UI.
+
+## 2026-09-16 — Feature 1 session close
+
+### Decisions made
+
+- Isolate this nested repository with its own `pnpm-workspace.yaml` and lockfile so dependency changes never alter the parent Week 2 workspace.
+- Use React, TypeScript, Vite, Three.js, and React Three Fiber in the scaffold, while keeping all Feature 1 domain modules free of React, Three.js, and browser imports.
+- Represent decisions, actions, behaviors, scenarios, evidence statements, input modes, and session phases as closed TypeScript unions derived from readonly constants.
+- Define one generic baseline scenario and four deterministic retest families: route change, accountability, assistance, and conflicting signs.
+- Prioritize retest selection in this order: blocked-route evidence, falsely closed accountability, unsupported solo search, then the all-targets-demonstrated fallback.
+- Validate that an action belongs to both the current decision and current scenario before creating an event.
+- Keep event objects to exactly five fields and clamp relative time to a nonnegative integer.
+- Map voice phrases according to the current decision so the same phrase can safely produce a scenario-specific allow-listed action; keep `pausar` as a session command that never becomes evidence.
+- Make `physicalValidation: "pending"` the only representable physical-validation state.
+
+### Verification
+
+- Peer dependency check: no issues.
+- ESLint: passed with no findings.
+- M01–M07: 22 tests passed across 4 files.
+- Strict TypeScript build: passed.
+- Vite production build: passed; generated `dist/index.html` and hashed CSS/JavaScript assets.
+- The Codex workspace shell did not expose `node` to pnpm child scripts, so the same installed ESLint, Vitest, TypeScript, and Vite entrypoints were executed directly with the bundled Node binary; this is an environment-path limitation, not a project failure.
+
+### Tomorrow's first move
+
+Start Feature 2 only: implement the safe Spanish start screen, in-memory session reducer, motion/view preferences, persistent pause control shell, and accessibility foundations without beginning the 3D scenario.

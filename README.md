@@ -6,12 +6,25 @@ The planned product combines a screen-based 3D simulation, transparent adaptive 
 
 ## Current stage
 
-Packet before code.
+Feature 1 complete: Vite/React/TypeScript foundation plus pure, tested domain contracts for actions, observable events, adaptive retest selection, and comparison evidence. The interactive five-screen experience is intentionally not implemented yet.
 
 - Product packet: [`docs/PACKET.md`](docs/PACKET.md)
 - Implementation prompt: [`docs/IMPLEMENTATION_PROMPT.md`](docs/IMPLEMENTATION_PROMPT.md)
 - Image-generation prompt: [`docs/IMAGE_PROMPT.md`](docs/IMAGE_PROMPT.md)
 - Decision log: [`DECISIONS.md`](DECISIONS.md)
+
+## Local checks
+
+Requires Node.js 20 or newer and pnpm.
+
+```bash
+pnpm install
+pnpm lint
+pnpm test
+pnpm build
+```
+
+The production bundle is written to `dist/`.
 
 ## Planned deployment
 

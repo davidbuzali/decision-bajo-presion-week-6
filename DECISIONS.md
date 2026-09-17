@@ -45,3 +45,24 @@ The problem, exact user, success definition, image-generated mockup, feature flo
 ### Tomorrow's first move
 
 Synchronize `docs/IMPLEMENTATION_PROMPT.md` with the finalized packet, divide the build into small acceptance-tested features and commits, and review that prompt before writing application code.
+
+## 2026-09-16 — Implementation-prompt session close
+
+### Decisions made
+
+- Keep domain logic independent from React, Three.js, and browser APIs.
+- Build pure typed contracts and M01–M07 tests before interface components.
+- Divide the app into seven acceptance-tested features followed by a real test-fix commit and an evidence-documentation commit.
+- Reuse one action validator and one event schema across 3D, flat view, keyboard, pointer, and voice paths.
+- Build the 3D scene from primitive geometry so the prototype has no external model, school map, or asset dependency.
+- Treat voice recognition as an optional adapter with explicit opt-in, `es-MX`, immediate transcript disposal, and complete fallback controls.
+- Make the physical-validation state immutable in domain types and unavailable as a digital closure control.
+- Require the first Vercel deployment after the tested feature build and the second only after the documented bug/persona fix.
+
+### Prompt status
+
+`docs/IMPLEMENTATION_PROMPT.md` now specifies the file boundaries, domain contracts, seven build features, acceptance criteria, security checks, M01–M15 test obligations, nine-build-commit plan, deployment sequence, session-close discipline, and definition of done.
+
+### Tomorrow's first move
+
+Start Feature 1 only: scaffold the Vite/React/TypeScript project, add the pure domain contracts and fixtures, implement M01–M07, run lint/tests/build, then commit and push that coherent increment before creating the UI.

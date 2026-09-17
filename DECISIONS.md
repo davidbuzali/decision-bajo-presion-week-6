@@ -259,3 +259,30 @@ Start Feature 7 only: render exactly one approved comparison statement for the t
 ### Next move
 
 Run the pre-deployment security and quality floor, document M01–M15 evidence, then create and verify Deployment 1 on Vercel before beginning the required real defect and persona test-fix cycle.
+
+## 2026-09-16 — M01–M15 and security-floor session close
+
+### Decisions made
+
+- Add Playwright as the missing reproducible end-to-end layer instead of treating an informal browser walkthrough as sufficient evidence for M11–M14.
+- Run Playwright in the installed stable Chrome channel because the Playwright CDN timed out while downloading its separate Chromium build; record that environment fact without weakening any assertion.
+- Exercise the full flat-view flow with native keyboard navigation, including Tab order, radio-group arrow-key selection, Enter activation, Space behavior, and automatic focus on resume.
+- Check horizontal overflow after every transition at 390 × 844 and retain desktop/mobile evidence screenshots under `docs/evidence/`.
+- Assert that the complete browser journey produces only same-origin `GET` requests when voice is disabled.
+- Treat authentication and Row Level Security as intentionally inapplicable because the source and dependency audits confirm that there is no personal data, account, backend, database, analytics system, or persistent client store.
+- Keep the lazy Three.js chunk size as an explicit Deployment 1 performance risk rather than hiding Vite's warning.
+
+### Verification
+
+- M01–M15: passed with traceability recorded in `docs/TESTING.md`.
+- ESLint: passed with no findings.
+- Vitest: 67 tests passed across 11 files.
+- Playwright: 2 tests passed in installed Google Chrome.
+- Strict TypeScript and Vite production build: passed.
+- Production dependency audit: no known vulnerabilities.
+- Secret, environment-file, personal/free-text input, persistence/network-write, and backend/auth/analytics dependency scans: no matches.
+- Desktop and 390 × 844 evidence screenshots: visually inspected and retained.
+
+### Next move
+
+Push the test/security commit, create Deployment 1 from that exact GitHub revision on Vercel, repeat the primary public journey, and append only verified deployment evidence to `docs/TESTING.md`.

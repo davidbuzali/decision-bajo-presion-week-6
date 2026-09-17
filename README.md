@@ -11,6 +11,7 @@ Features 1–7 complete: the Vite/React/TypeScript working slice now supports a 
 - Product packet: [`docs/PACKET.md`](docs/PACKET.md)
 - Implementation prompt: [`docs/IMPLEMENTATION_PROMPT.md`](docs/IMPLEMENTATION_PROMPT.md)
 - Image-generation prompt: [`docs/IMAGE_PROMPT.md`](docs/IMAGE_PROMPT.md)
+- Testing and security evidence: [`docs/TESTING.md`](docs/TESTING.md)
 - Decision log: [`DECISIONS.md`](DECISIONS.md)
 
 ## Local checks

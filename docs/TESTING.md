@@ -142,3 +142,29 @@ Result: 3 tests passed in 12.9 seconds.
 | Current decision | Keep open for the required post-persona fix decision. Compare its low severity with any persona blockers before choosing commit 8; do not hide or suppress the warning without resolving dependency compatibility. |
 
 The warning does not appear in the flat-view journey and did not prevent the public 3D canvas from rendering. It is recorded as a real defect, not presented as a fixed issue.
+
+## Deployment 2 — P01 correction
+
+| Field | Verified value |
+|---|---|
+| Vercel project | `davidbuzali/decision-bajo-presion-week-6` |
+| GitHub source | `davidbuzali/decision-bajo-presion-week-6`, connected by Vercel |
+| Source commit | `9bee7474b21ca55dda5a57f39bb2f179b2ec64bf` |
+| Deployment ID | `dpl_4qQGk7tec6tTKgrAP5KFVg6QfUfw` |
+| Created | `2026-09-17T02:55:31Z` |
+| Target/status | Production / Ready |
+| Immutable URL | `https://decision-bajo-presion-week-6-9jxb2r2dx-davidbuzali.vercel.app` |
+| Production alias | `https://decision-bajo-presion-week-6.vercel.app` |
+
+Public verification passed on 2026-09-17:
+
+- The stable alias returned HTTP 200 with a Vercel cache hit and `strict-transport-security: max-age=63072000; includeSubDomains; preload`.
+- All four Playwright checks passed against the public alias in 13.7 seconds.
+- Screen 3 visibly exposes **Pausar y salir** before the human-debrief confirmation.
+- Pausing from Screen 3 opens the neutral pause overlay without creating a decision or satisfying the human gate.
+- The human confirmation is unavailable while paused; resuming returns to the same debrief with its evidence intact.
+- The unseen retest remains inaccessible until the participant explicitly confirms that the human debrief occurred.
+- The changed Screen 3 was recaptured from the public deployment and repeated with Laura's original persona instructions.
+- The immutable physical-validation gate, reload privacy reset, 390 × 844 layout, request-origin assertion, and lazy 3D canvas continue to pass.
+
+P01 is resolved. D01 remains open as a low-severity upstream deprecation warning and did not block Deployment 2.

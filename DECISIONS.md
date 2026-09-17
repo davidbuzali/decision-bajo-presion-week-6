@@ -334,3 +334,29 @@ Run the fresh-conversation Laura persona pass with Screens 1–5, compare its hi
 ### Next move
 
 Implement commit 8 for P01: retain the non-bypassable human-debrief confirmation while making a clear pause/exit route available on Screen 3, add regression coverage, capture the changed screen, and repeat the affected persona screen before Deployment 2.
+
+## 2026-09-16 — P01 correction and Deployment 2
+
+### Decisions made
+
+- Extend the existing pause state to resume into `debrief` as well as `baseline` and `retest`, instead of adding a second navigation path or weakening the human confirmation.
+- Keep **Confirmo que ocurrió el debrief humano** as the only transition from debrief to retest.
+- Make the confirmation unavailable inside the pause overlay, preserve the observable trace in memory, and return the participant to the unchanged human-debrief screen on resume.
+- Add reducer, component, and Playwright regression checks for the non-bypassable gate.
+- Repeat only the affected persona screen and preserve the changed public screenshot as the correction evidence.
+
+### Verification
+
+- ESLint, strict TypeScript, and the Vite production build passed.
+- Vitest: 69 tests passed across 11 files.
+- Local Playwright: 4 tests passed, including the Screen 3 pause/resume route.
+- Public Playwright on Deployment 2: 4 tests passed in 13.7 seconds.
+- Persona retest: Laura notices **Pausar y salir**, can wait or leave without making a false confirmation, and still cannot enter the unseen retest without the human-debrief acknowledgment.
+- P01 changed from `blocks completion` to resolved on the affected task.
+- Deployment 2 `dpl_4qQGk7tec6tTKgrAP5KFVg6QfUfw` is Ready at the stable production alias.
+
+### Remaining observations
+
+- The lower-severity ambiguity about immediate decision recording remains open.
+- The lower-severity final-session closure question remains open.
+- D01, the upstream `THREE.Clock` deprecation warning, remains open and non-blocking.

@@ -79,7 +79,7 @@ export function StartScreen({
             />
             <span>
               <strong>Movimiento normal</strong>
-              <small>Transiciones y cámara suave.</small>
+              <small>Transiciones visuales suaves.</small>
             </span>
           </label>
           <label className="choice-card">
@@ -92,7 +92,7 @@ export function StartScreen({
             />
             <span>
               <strong>Movimiento reducido</strong>
-              <small>Sin movimiento de cámara ni efectos innecesarios.</small>
+              <small>Sin animaciones ni efectos innecesarios.</small>
             </span>
           </label>
         </fieldset>

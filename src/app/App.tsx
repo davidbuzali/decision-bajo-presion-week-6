@@ -1,6 +1,13 @@
-import { useReducer } from "react";
+import { useReducer, useRef } from "react";
+import { BaselineRehearsal } from "../components/BaselineRehearsal";
 import { PauseOverlay } from "../components/PauseOverlay";
 import { StartScreen } from "../components/StartScreen";
+import { createDecisionEvent } from "../domain/actions";
+import {
+  BASELINE_DECISION_IDS,
+  type ActionCode,
+  type InputMode,
+} from "../domain/types";
 import {
   createInitialSessionState,
   sessionReducer,
@@ -12,16 +19,77 @@ export function App() {
     undefined,
     createInitialSessionState,
   );
+  const startedAtRef = useRef<number | null>(null);
+  const pauseStartedAtRef = useRef<number | null>(null);
+  const pausedDurationRef = useRef(0);
+
+  const canPause = session.phase === "baseline" || session.phase === "retest";
+  const baselineEvents = session.events.filter(
+    (event) => event.scenarioId === "baseline_corridor_a",
+  );
+
+  function startSession() {
+    startedAtRef.current = performance.now();
+    pauseStartedAtRef.current = null;
+    pausedDurationRef.current = 0;
+    dispatch({ type: "start" });
+  }
+
+  function pauseSession() {
+    if (!canPause) {
+      return;
+    }
+
+    pauseStartedAtRef.current = performance.now();
+    dispatch({ type: "pause" });
+  }
+
+  function resumeSession() {
+    if (pauseStartedAtRef.current !== null) {
+      pausedDurationRef.current += performance.now() - pauseStartedAtRef.current;
+      pauseStartedAtRef.current = null;
+    }
+    dispatch({ type: "resume" });
+  }
+
+  function exitSession() {
+    startedAtRef.current = null;
+    pauseStartedAtRef.current = null;
+    pausedDurationRef.current = 0;
+    dispatch({ type: "exit" });
+  }
+
+  function recordBaselineDecision(actionCode: ActionCode, inputMode: InputMode) {
+    const decision = BASELINE_DECISION_IDS[baselineEvents.length];
+    const startedAt = startedAtRef.current;
+    if (!decision || startedAt === null || session.phase !== "baseline") {
+      return;
+    }
+
+    const event = createDecisionEvent({
+      scenarioId: "baseline_corridor_a",
+      decisionId: decision,
+      candidateAction: actionCode,
+      relativeTimeMs: performance.now() - startedAt - pausedDurationRef.current,
+      inputMode,
+    });
+
+    if (event) {
+      dispatch({ type: "record_event", event });
+    }
+  }
 
   const liveStatus =
     session.phase === "intro"
       ? "Configuración inicial"
       : session.phase === "paused"
         ? "Sesión pausada"
-        : "Ensayo iniciado";
+        : session.phase === "debrief"
+          ? "Escenario inicial completado"
+          : "Ensayo iniciado";
 
   return (
-    <div className="app-shell">
+    <div className="app-shell" data-motion={session.settings.motion}>
       <a className="skip-link" href="#main-content">
         Saltar al contenido
       </a>
@@ -35,11 +103,11 @@ export function App() {
             <small>Prototipo · datos ficticios</small>
           </span>
         </a>
-        {session.phase !== "intro" && session.phase !== "paused" ? (
+        {canPause ? (
           <button
             className="pause-button"
             type="button"
-            onClick={() => dispatch({ type: "pause" })}
+            onClick={pauseSession}
           >
             <span aria-hidden="true">II</span>
             Pausar y salir
@@ -61,41 +129,38 @@ export function App() {
           onVoiceChange={(enabled) =>
             dispatch({ type: "set_voice_enabled", enabled })
           }
-          onStart={() => dispatch({ type: "start" })}
+          onStart={startSession}
         />
       ) : session.phase === "paused" ? (
         <PauseOverlay
-          onResume={() => dispatch({ type: "resume" })}
-          onExit={() => dispatch({ type: "exit" })}
+          onResume={resumeSession}
+          onExit={exitSession}
         />
-      ) : (
+      ) : session.phase === "baseline" ? (
+        <BaselineRehearsal
+          events={baselineEvents}
+          motion={session.settings.motion}
+          view={session.settings.view}
+          onDecision={recordBaselineDecision}
+        />
+      ) : session.phase === "debrief" ? (
         <main id="main-content" className="session-page">
           <section className="session-placeholder" aria-labelledby="session-title">
             <div className="session-meta">
-              <span>Paso 1 de 5</span>
-              <span>
-                {session.settings.view === "three_d"
-                  ? "Vista 3D en pantalla"
-                  : "Vista plana"}
-              </span>
-              <span>
-                {session.settings.motion === "reduced"
-                  ? "Movimiento reducido"
-                  : "Movimiento normal"}
-              </span>
+              <span>Paso 2 de 5</span>
+              <span>3 decisiones registradas</span>
             </div>
-            <p className="eyebrow">Sesión preparada</p>
-            <h1 id="session-title">Escenario inicial</h1>
+            <p className="eyebrow">Escenario inicial completo</p>
+            <h1 id="session-title">Decisión registrada</h1>
             <p>
-              La configuración accesible y el control de pausa están activos. El
-              escenario de decisiones se incorporará en el siguiente incremento.
+              Las tres acciones observables están en memoria. La secuencia y el
+              debrief humano se incorporarán en el siguiente incremento.
             </p>
-            {session.settings.voiceEnabled ? (
-              <p className="inline-status">
-                Voz preparada, todavía sin solicitar acceso al micrófono.
-              </p>
-            ) : null}
           </section>
+        </main>
+      ) : (
+        <main id="main-content" className="session-page">
+          <p>Esta fase todavía no está disponible.</p>
         </main>
       )}
 

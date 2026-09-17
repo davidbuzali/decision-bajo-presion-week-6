@@ -86,4 +86,51 @@ describe("Feature 2 session reducer", () => {
       createInitialSessionState(),
     );
   });
+
+  it("records baseline decisions in order and enters the debrief placeholder", () => {
+    const first = event({
+      decisionId: "baseline_alert",
+      actionCode: "observe_and_follow_instruction",
+    });
+    const second = event({
+      decisionId: "baseline_blocked_exit",
+      actionCode: "verify_alternate_route",
+    });
+    const third = event({
+      decisionId: "baseline_accountability",
+      actionCode: "report_and_request_support",
+    });
+
+    let state = sessionReducer(createInitialSessionState(), { type: "start" });
+    state = sessionReducer(state, { type: "record_event", event: first });
+    state = sessionReducer(state, { type: "record_event", event: second });
+    state = sessionReducer(state, { type: "record_event", event: third });
+
+    expect(state.events).toEqual([first, second, third]);
+    expect(state.phase).toBe("debrief");
+  });
+
+  it("rejects duplicate and out-of-order baseline events", () => {
+    const first = event({
+      decisionId: "baseline_alert",
+      actionCode: "observe_and_follow_instruction",
+    });
+    const second = event({
+      decisionId: "baseline_blocked_exit",
+      actionCode: "verify_alternate_route",
+    });
+    const active = sessionReducer(createInitialSessionState(), { type: "start" });
+
+    expect(
+      sessionReducer(active, { type: "record_event", event: second }),
+    ).toBe(active);
+
+    const afterFirst = sessionReducer(active, {
+      type: "record_event",
+      event: first,
+    });
+    expect(
+      sessionReducer(afterFirst, { type: "record_event", event: first }),
+    ).toBe(afterFirst);
+  });
 });

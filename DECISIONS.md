@@ -119,3 +119,33 @@ Start Feature 2 only: implement the safe Spanish start screen, in-memory session
 ### Tomorrow's first move
 
 Start Feature 3 only: implement the three-decision baseline with primitive 3D geometry and exact flat-view parity, route every interaction through the existing validator and event contract, and preserve the Feature 2 pause and accessibility behavior.
+
+## 2026-09-16 — Feature 3 session close
+
+### Decisions made
+
+- Render the fictional corridor entirely from Three.js primitive geometry, lights, signs, barriers, and anonymous capsule figures; use no downloaded model or real school layout.
+- Lazy-load the 3D engine after entry so the safe start screen and flat flow do not pay the WebGL bundle cost.
+- Keep 3D and flat presentation inside one baseline component so both modes expose the exact same prompts, option labels, progress, status, and event callback.
+- Route pointer and keyboard activation through the same `createDecisionEvent` validator. Only `inputMode` differs for an equivalent action.
+- Enforce baseline ordering again inside the reducer, rejecting duplicate, out-of-order, wrong-scenario, and post-baseline events even if a UI caller misbehaves.
+- Subtract time spent paused from relative event timing. Pausing preserves the current decision and evidence without producing an event.
+- Use a demand-driven render loop when reduced motion is selected and disable CSS animation through the application-level motion setting.
+- Transition to an honest Feature 4 placeholder after the third decision; do not partially implement the trace or human-debrief logic in this increment.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 38 tests passed across 7 files, including view parity, keyboard/pointer routing, ordered reducer acceptance, duplicate rejection, all three baseline decisions, and pause/resume preservation.
+- Strict TypeScript build: passed.
+- Vite production build: passed. The initial application bundle remains separate from the lazy-loaded Three.js scene bundle.
+- Browser QA: the real WebGL corridor rendered, the second decision changed the exit to a blocked state, and the reduced-motion flat view preserved the same options and status hierarchy.
+- Browser console showed only Three.js's upstream `Clock` deprecation warning from the rendering dependency; the application produced no runtime errors.
+
+### Unresolved risk
+
+- The lazy-loaded 3D dependency chunk is approximately 895 kB minified (236 kB gzip). It does not delay the start or flat-view path, but public-deployment performance should be checked on Deployment 1.
+
+### Tomorrow's first move
+
+Start Feature 4 only: render the neutral baseline event trace, derive one adaptive behavior target, label the recommendation as simulated AI with a human final decision, and require the in-memory human-debrief acknowledgment before the retest.

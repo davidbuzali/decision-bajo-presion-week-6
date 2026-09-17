@@ -44,15 +44,15 @@ describe("Feature 2 safe start", () => {
     expect(getUserMedia).not.toHaveBeenCalled();
 
     await user.click(screen.getByRole("button", { name: /Comenzar ensayo/i }));
-    expect(screen.getByText("Vista plana")).toBeInTheDocument();
+    expect(screen.getByText(/Vista plana · Mismas decisiones/i)).toBeInTheDocument();
     expect(screen.getByText("Movimiento reducido")).toBeInTheDocument();
-    expect(screen.getByText(/Voz preparada/i)).toBeInTheDocument();
   });
 
   it("supports keyboard start and pause without recording a failure", async () => {
     const user = userEvent.setup();
     render(<App />);
 
+    await user.click(screen.getByRole("radio", { name: /Vista plana/i }));
     const start = screen.getByRole("button", { name: /Comenzar ensayo/i });
     start.focus();
     await user.keyboard("{Enter}");
@@ -72,7 +72,9 @@ describe("Feature 2 safe start", () => {
 
     await user.click(screen.getByRole("button", { name: /Reanudar ensayo/i }));
     expect(
-      screen.getByRole("heading", { name: "Escenario inicial" }),
+      screen.getByRole("heading", {
+        name: "La alerta comienza. ¿Qué haces primero?",
+      }),
     ).toBeInTheDocument();
   });
 
@@ -83,6 +85,7 @@ describe("Feature 2 safe start", () => {
     await user.click(
       screen.getByRole("radio", { name: /Movimiento reducido/i }),
     );
+    await user.click(screen.getByRole("radio", { name: /Vista plana/i }));
     await user.click(screen.getByRole("button", { name: /Comenzar ensayo/i }));
     await user.click(screen.getByRole("button", { name: /Pausar y salir/i }));
     await user.click(screen.getByRole("button", { name: /Salir sin guardar/i }));

@@ -27,6 +27,9 @@ pnpm build
 
 The production bundle is written to `dist/`.
 
-## Planned deployment
+## Deployment
 
-The working application will be deployed on Vercel after the initial build and again after the documented test-fix cycle.
+- Deployment 1: [decision-bajo-presion-week-6.vercel.app](https://decision-bajo-presion-week-6.vercel.app)
+- Source revision: `4850771`
+
+Deployment 2 remains intentionally pending until the documented persona/mechanical issue is selected, fixed, and reverified.

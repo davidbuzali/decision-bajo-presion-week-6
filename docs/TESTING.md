@@ -99,6 +99,46 @@ The Playwright configuration uses the installed stable Chrome channel. The brows
 - The optional Three.js path is correctly lazy-loaded, but its 895.68 kB minified chunk exceeds Vite's 500 kB warning threshold. The safe start and flat-view paths do not load it. Public-load behavior must be inspected on Deployment 1.
 - Browser speech recognition depends on browser support and may use a browser-provider service only after explicit opt-in. Deployment verification will not grant microphone permission or transmit speech.
 
-## Deployment record
+## Deployment 1
 
-Deployment 1 is not yet recorded in this revision. Add the immutable deployment URL or identifier, public alias, source commit, UTC time, full public-flow result, resource-request result, and any real observed defect only after the live deployment has been opened and verified. Do not treat a local preview as deployment evidence.
+| Field | Verified value |
+|---|---|
+| Vercel project | `davidbuzali/decision-bajo-presion-week-6` |
+| GitHub source | `davidbuzali/decision-bajo-presion-week-6`, connected by Vercel |
+| Source commit | `48507716c946379d62940b585e557a5bbc1373b5` |
+| Deployment ID | `dpl_4EpMNwyanWvVaYjfsYa6wwPmXgZW` |
+| Created | `2026-09-17T02:27:32Z` |
+| Target/status | Production / Ready |
+| Immutable URL | `https://decision-bajo-presion-week-6-4mvth3w0g-davidbuzali.vercel.app` |
+| Production alias | `https://decision-bajo-presion-week-6.vercel.app` |
+
+Public verification passed on 2026-09-17:
+
+- Vercel installed the locked dependencies and completed `pnpm run build` successfully.
+- The public safe start rendered without authentication or Deployment Protection.
+- The production alias returned HTTP 200 with Vercel caching and `strict-transport-security: max-age=63072000; includeSubDomains; preload`.
+- The complete flat-view journey passed: baseline → pause/resume → neutral trace → human debrief → different unseen retest → approved comparison statement → **Pendiente de validación física**.
+- A real public reload returned to the clean start screen with no retained result.
+- The browser-loaded HTML referenced only same-origin hashed JavaScript and CSS assets.
+- The public Playwright command below passed all three browser checks, including the 390 × 844 flow, reload reset, same-origin `GET` request assertion, and lazy 3D canvas smoke test.
+- The optional 3D corridor rendered successfully from `ScenarioScene3D-DfWDNpEi.js`.
+
+```bash
+PLAYWRIGHT_BASE_URL=https://decision-bajo-presion-week-6.vercel.app pnpm test:e2e
+```
+
+Result: 3 tests passed in 12.9 seconds.
+
+### Real defect D01 — upstream 3D deprecation warning
+
+| Item | Evidence |
+|---|---|
+| Severity | Low engineering risk; no user-visible blockage |
+| Reproduction | Open the production alias, keep the default 3D view, select **Comenzar ensayo**, then inspect the browser console. |
+| Expected | The lazy 3D corridor renders without runtime warnings. |
+| Actual | The corridor renders, but the console reports: `THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.` |
+| Root cause | `@react-three/fiber@9.7.0` constructs `new THREE.Clock()` in its distributed renderer while `three@0.186.0` marks that class deprecated. The warning originates from the hashed lazy 3D chunk, not application scenario code. |
+| Screenshot | [Deployment 1 public 3D corridor](evidence/deployment-1-3d.png) |
+| Current decision | Keep open for the required post-persona fix decision. Compare its low severity with any persona blockers before choosing commit 8; do not hide or suppress the warning without resolving dependency compatibility. |
+
+The warning does not appear in the flat-view journey and did not prevent the public 3D canvas from rendering. It is recorded as a real defect, not presented as a fixed issue.

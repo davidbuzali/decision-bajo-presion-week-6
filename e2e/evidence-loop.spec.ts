@@ -102,6 +102,7 @@ test("M11–M13: keyboard journey reaches the immutable physical gate and reload
   });
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/");
+  const applicationOrigin = new URL(page.url()).origin;
 
   await completeRouteJourney(page, "keyboard");
 
@@ -129,7 +130,7 @@ test("M11–M13: keyboard journey reaches the immutable physical gate and reload
   expect(
     applicationRequests.filter((request) => {
       const url = new URL(request.url);
-      return url.origin !== "http://127.0.0.1:4173" || request.method !== "GET";
+      return url.origin !== applicationOrigin || request.method !== "GET";
     }),
   ).toEqual([]);
 });
@@ -160,5 +161,27 @@ test("M14: the complete journey remains usable at 390 × 844 without horizontal 
     testInfo,
     "m14-mobile-physical-gate",
     "docs/evidence/m14-mobile-physical-gate.png",
+  );
+});
+
+test("Deployment smoke: the lazy 3D path renders its fictional corridor", async ({
+  page,
+}, testInfo) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/");
+  await page.getByRole("button", { name: /Comenzar ensayo/i }).click();
+
+  await expect(
+    page.getByRole("img", {
+      name: "Corredor escolar ficticio representado con geometría simple",
+    }),
+  ).toBeVisible();
+  await expect(page.locator("canvas")).toBeVisible();
+  await page.waitForTimeout(750);
+  await attachScreenshot(
+    page,
+    testInfo,
+    "deployment-1-3d",
+    "docs/evidence/deployment-1-3d.png",
   );
 });

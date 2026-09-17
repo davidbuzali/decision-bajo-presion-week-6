@@ -286,3 +286,27 @@ Run the pre-deployment security and quality floor, document M01–M15 evidence, 
 ### Next move
 
 Push the test/security commit, create Deployment 1 from that exact GitHub revision on Vercel, repeat the primary public journey, and append only verified deployment evidence to `docs/TESTING.md`.
+
+## 2026-09-16 — Deployment 1 session close
+
+### Decisions made
+
+- Create the Vercel project under `davidbuzali`, connect the dedicated GitHub repository, and deploy the exact pushed test/security revision `4850771` to production.
+- Preserve both the immutable deployment URL and the stable production alias in the evidence record.
+- Extend Playwright with an optional `PLAYWRIGHT_BASE_URL` so the same assertions can verify a public deployment without starting or mistaking a local preview for production.
+- Add a public 3D smoke check alongside the complete flat-view journey, mobile overflow checks, request-origin assertion, and reload reset.
+- Record the public Three.js `Clock` deprecation warning as real defect D01. It is non-blocking and originates inside React Three Fiber, but it remains open rather than being suppressed or mislabeled as resolved.
+
+### Verification
+
+- Vercel deployment `dpl_4EpMNwyanWvVaYjfsYa6wwPmXgZW`: production status **Ready**.
+- Production alias: `https://decision-bajo-presion-week-6.vercel.app`.
+- Public Playwright pass: 3 tests passed in 12.9 seconds.
+- Full five-screen flat journey, pause/resume, physical-validation gate, 390 × 844 layout, reload privacy reset, same-origin `GET` requests, and lazy 3D canvas: verified on the public alias.
+- Public HTML asset references: same-origin hashed JavaScript and CSS only.
+- Production alias response: HTTP 200 with Vercel cache hit and HSTS enabled.
+- Runtime finding: one upstream `THREE.Clock` deprecation warning when the optional 3D chunk loads; no error and no user-visible failure.
+
+### Next move
+
+Run the fresh-conversation Laura persona pass with Screens 1–5, compare its highest-severity observation with open defect D01, and choose the highest-severity real issue for commit 8 before creating Deployment 2.

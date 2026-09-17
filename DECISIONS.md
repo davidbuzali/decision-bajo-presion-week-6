@@ -310,3 +310,27 @@ Push the test/security commit, create Deployment 1 from that exact GitHub revisi
 ### Next move
 
 Run the fresh-conversation Laura persona pass with Screens 1–5, compare its highest-severity observation with open defect D01, and choose the highest-severity real issue for commit 8 before creating Deployment 2.
+
+## 2026-09-16 — Laura persona pass
+
+### Decisions made
+
+- Capture Screens 1–5 from the verified public alias in order and carry Laura's stated reduced-motion and flat-view choices into every later screenshot.
+- Run the final walkthrough in this chat at the user's explicit request and label it honestly as a synthetic persona pass rather than a real participant interview.
+- Exclude an initial capture artifact that applied flat view without applying reduced motion; regenerate the evidence before making the final observations.
+- Rank the missing safe exit on the required human-debrief screen as `blocks completion`, above the low-severity Three.js deprecation warning and the recording/closure ambiguities.
+- Preserve the human gate: the proposed correction adds a pause/exit path but must not allow the participant to bypass or falsely satisfy the debrief.
+
+### Results
+
+- Laura found and understood reduced motion, flat view, and optional voice on Screen 1.
+- **Pausar y salir** was prominent on decision Screens 2 and 4.
+- Laura understood that selections are recorded but hesitated because activation appears immediate and irreversible.
+- Laura correctly understood the neutral trace and did not interpret the adaptive focus as a competence score.
+- Laura clearly distinguished improvement in the unseen retest from **Pendiente de validación física**.
+- Highest-severity finding P01: Screen 3 requires a real human debrief but exposes no visible pause/exit path if that person is unavailable.
+- Full observations and evidence are recorded in `docs/PERSONA.md`.
+
+### Next move
+
+Implement commit 8 for P01: retain the non-bypassable human-debrief confirmation while making a clear pause/exit route available on Screen 3, add regression coverage, capture the changed screen, and repeat the affected persona screen before Deployment 2.

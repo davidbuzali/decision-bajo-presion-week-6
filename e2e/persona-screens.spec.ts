@@ -16,6 +16,7 @@ test("capture Screens 1–5 in order for the fresh persona pass", async ({ page 
   ).toBeVisible();
   await capture(page, "screen-1-safe-start.png");
 
+  await page.getByRole("radio", { name: /Movimiento reducido/i }).check();
   await page.getByRole("radio", { name: /Vista plana/i }).check();
   await page.getByRole("button", { name: /Comenzar ensayo/i }).click();
   await expect(

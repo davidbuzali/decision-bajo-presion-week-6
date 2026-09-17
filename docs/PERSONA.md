@@ -82,4 +82,20 @@ The human gate must remain non-bypassable, but Laura may reach it before the res
 
 ## Retest status
 
-Not started. After P01 is fixed, capture the changed Screen 3 and repeat that screen with the same persona instructions to determine whether Laura can wait or exit without feeling pressured to make a false confirmation.
+Completed locally on 2026-09-16 after the P01 correction. Public Deployment 2 verification remains required.
+
+## Screen 3 retest after P01 correction
+
+Evidence: [Changed human-debrief screen](evidence/persona/screen-3-human-debrief.png)
+
+> “I can see **Pausar y salir** before I confirm anything. If the responsible person is not available, I can pause, choose whether to resume or leave without saving, and I do not have to claim that the conversation happened. When I resume, I return to the same review and still must confirm the real debrief before the new scenario begins.”
+
+The affected screen was repeated with Laura's original instructions and accessibility choices. The retest verified that:
+
+- **Pausar y salir** is visible on the human-debrief screen.
+- Pausing creates no decision or debrief confirmation.
+- The confirmation control is unavailable inside the pause overlay.
+- Resuming returns to the human-debrief screen with the observable trace intact.
+- The unseen retest remains inaccessible until **Confirmo que ocurrió el debrief humano** is explicitly activated after the real conversation.
+
+Retest outcome: P01 reduced from `blocks completion` to `none` on the affected task. The human gate remains non-bypassable. The lower-severity recording-timing and final-session-closure observations remain open and do not block Deployment 2.

@@ -17,12 +17,12 @@ Environment: macOS, Node.js 20+, Google Chrome through Playwright 1.63.0
 | M07 | Pass | `tests/events.test.ts` asserts the exact five-field event schema and rejects invalid actions, timing, input modes, and scenarios. |
 | M08 | Pass | `tests/voice.test.tsx` proves recognition is not constructed or started before the explicit **Escuchar comando** action. |
 | M09 | Pass | `tests/voice.test.tsx` confirms unsupported, permission-denied, network-error, and recognition-error states leave visible buttons usable. |
-| M10 | Pass | `tests/session.test.tsx`, `tests/baseline.test.tsx`, `tests/retest.test.tsx`, and `tests/sessionReducer.test.ts` verify pause availability, focus transfer, phase preservation, and zero evidence creation in baseline and retest. |
+| M10 | Pass | `tests/session.test.tsx`, `tests/baseline.test.tsx`, `tests/debrief.test.tsx`, `tests/retest.test.tsx`, and `tests/sessionReducer.test.ts` verify pause availability, focus transfer, phase preservation, and zero evidence or confirmation creation in baseline, human debrief, and retest. |
 | M11 | Pass | `e2e/evidence-loop.spec.ts` completes the entire flat-view journey with native Tab, arrow-key, Enter, and Space patterns; component tests confirm pointer/keyboard action parity. |
-| M12 | Pass | Playwright completes baseline → pause/resume → neutral trace → human-debrief acknowledgment → different unseen retest → comparison and finds the immutable physical gate. |
+| M12 | Pass | Playwright completes baseline → pause/resume → neutral trace → debrief pause/resume → human-debrief acknowledgment → different unseen retest → comparison and finds the immutable physical gate. |
 | M13 | Pass | The Playwright journey reloads after comparison and observes the clean start screen with no retained result; component tests also cover remount and exit resets. |
 | M14 | Pass | Playwright repeats the complete flow at 390 × 844 and checks for horizontal overflow after every transition. Desktop and mobile screenshots were visually inspected. |
-| M15 | Pass | Lint, 67 Vitest tests, 2 Playwright tests, strict TypeScript, production build, tracked-source scans, fixture review, same-origin GET-only browser request assertion, and production dependency audit all pass. |
+| M15 | Pass | Lint, 69 Vitest tests, 4 Playwright tests, strict TypeScript, production build, tracked-source scans, fixture review, same-origin GET-only browser request assertion, and production dependency audit all pass. |
 
 ## Recorded screenshots
 
@@ -48,15 +48,15 @@ git diff --check
 Results on 2026-09-16:
 
 - ESLint: passed with no findings.
-- Vitest: 67 tests passed across 11 files.
-- Playwright: 2 tests passed in installed Google Chrome.
+- Vitest: 69 tests passed across 11 files.
+- Playwright: 4 tests passed in installed Google Chrome.
 - Strict TypeScript: passed.
 - Vite production build: passed.
 - Production dependency audit: no known vulnerabilities.
 - Diff whitespace check: passed.
-- Production output: `dist/index.html` 0.54 kB, initial JavaScript 223.03 kB (69.24 kB gzip), CSS 19.23 kB (4.65 kB gzip), lazy 3D chunk 895.68 kB (236.51 kB gzip).
+- Production output: `dist/index.html` 0.54 kB, initial JavaScript 223.07 kB (69.25 kB gzip), CSS 19.23 kB (4.65 kB gzip), lazy 3D chunk 895.68 kB (236.51 kB gzip).
 
-The Playwright configuration uses the installed stable Chrome channel. The browser download command timed out against the Playwright CDN in this environment, so no downloaded Chromium binary was used. This did not weaken the browser checks: both tests ran in the installed Chrome browser and passed.
+The Playwright configuration uses the installed stable Chrome channel. The browser download command timed out against the Playwright CDN in this environment, so no downloaded Chromium binary was used. This did not weaken the browser checks: all four tests ran in the installed Chrome browser and passed.
 
 ## Five-check security floor
 

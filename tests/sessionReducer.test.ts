@@ -71,6 +71,24 @@ describe("Feature 2 session reducer", () => {
     expect(resumed.events).toEqual([baselineEvent]);
   });
 
+  it("pauses and resumes the human debrief without satisfying its gate", () => {
+    const debrief = completedBaselineState();
+
+    const paused = sessionReducer(debrief, { type: "pause" });
+    expect(paused.phase).toBe("paused");
+    expect(paused.resumePhase).toBe("debrief");
+    expect(paused.events).toEqual(debrief.events);
+
+    expect(
+      sessionReducer(paused, { type: "confirm_debrief" }),
+    ).toBe(paused);
+
+    const resumed = sessionReducer(paused, { type: "resume" });
+    expect(resumed.phase).toBe("debrief");
+    expect(resumed.resumePhase).toBeNull();
+    expect(resumed.events).toEqual(debrief.events);
+  });
+
   it("ignores pause outside an active scenario", () => {
     const intro = createInitialSessionState();
     expect(sessionReducer(intro, { type: "pause" })).toBe(intro);

@@ -66,6 +66,24 @@ async function completeRouteJourney(
   await onStep();
   await activate(/^Reportar la diferencia y pedir apoyo coordinado$/i);
   await onStep();
+
+  await expect(
+    page.getByRole("heading", { name: "Debrief humano requerido" }),
+  ).toBeVisible();
+  await activate(/Pausar y salir/i);
+  await expect(
+    page.getByRole("dialog", { name: /Tómate el tiempo/i }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Confirmo que ocurrió el debrief humano/i }),
+  ).toHaveCount(0);
+  await onStep();
+  await activate(/Reanudar ensayo/i);
+  await expect(
+    page.getByRole("heading", { name: "Debrief humano requerido" }),
+  ).toBeVisible();
+  await onStep();
+
   await activate("Confirmo que ocurrió el debrief humano");
   await onStep();
   await activate("Verificar y seguir la ruta temporal señalizada");

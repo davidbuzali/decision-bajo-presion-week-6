@@ -124,7 +124,9 @@ describe("Feature 3 baseline rehearsal", () => {
       }),
     ).toBeVisible();
     expect(screen.getByText("3 eventos observables")).toBeVisible();
-    expect(screen.queryByRole("button", { name: /Pausar y salir/i })).toBeNull();
+    expect(
+      screen.getByRole("button", { name: /Pausar y salir/i }),
+    ).toBeVisible();
   });
 
   it("preserves the current decision when paused and resumed", async () => {

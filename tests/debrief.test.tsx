@@ -122,4 +122,45 @@ describe("Feature 4 observable trace and human debrief", () => {
       }),
     ).toBeNull();
   });
+
+  it("can pause and return to the debrief without bypassing confirmation", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole("radio", { name: /Vista plana/i }));
+    await user.click(screen.getByRole("button", { name: /Comenzar ensayo/i }));
+    await user.click(screen.getByRole("button", { name: /Observar el entorno/i }));
+    await user.click(screen.getByRole("button", { name: /Intentar pasar/i }));
+    await user.click(
+      screen.getByRole("button", {
+        name: /^Reportar la diferencia y pedir apoyo coordinado$/i,
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", { name: "Debrief humano requerido" }),
+    ).toBeVisible();
+    await user.click(screen.getByRole("button", { name: /Pausar y salir/i }));
+
+    expect(
+      screen.getByRole("dialog", { name: /Tómate el tiempo/i }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("button", {
+        name: "Confirmo que ocurrió el debrief humano",
+      }),
+    ).toBeNull();
+
+    await user.click(screen.getByRole("button", { name: /Reanudar ensayo/i }));
+    expect(
+      screen.getByRole("button", {
+        name: "Confirmo que ocurrió el debrief humano",
+      }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("heading", {
+        name: "La ruta alterna habitual también está cerrada. ¿Qué haces?",
+      }),
+    ).toBeNull();
+  });
 });

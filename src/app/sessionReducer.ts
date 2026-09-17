@@ -15,11 +15,11 @@ export type SessionSettings = Readonly<{
   voiceEnabled: boolean;
 }>;
 
-type ActiveScenarioPhase = Extract<SessionPhase, "baseline" | "retest">;
+type PausablePhase = Extract<SessionPhase, "baseline" | "debrief" | "retest">;
 
 export type SessionState = Readonly<{
   phase: SessionPhase;
-  resumePhase: ActiveScenarioPhase | null;
+  resumePhase: PausablePhase | null;
   settings: SessionSettings;
   events: readonly DecisionEvent[];
 }>;
@@ -149,7 +149,9 @@ export function sessionReducer(
       return hasCompleteTrace ? { ...state, phase: "retest" } : state;
     }
     case "pause":
-      return state.phase === "baseline" || state.phase === "retest"
+      return state.phase === "baseline" ||
+        state.phase === "debrief" ||
+        state.phase === "retest"
         ? {
             ...state,
             phase: "paused",

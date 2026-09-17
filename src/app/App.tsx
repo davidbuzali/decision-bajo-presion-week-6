@@ -31,7 +31,10 @@ export function App() {
   const pauseStartedAtRef = useRef<number | null>(null);
   const pausedDurationRef = useRef(0);
 
-  const canPause = session.phase === "baseline" || session.phase === "retest";
+  const canPause =
+    session.phase === "baseline" ||
+    session.phase === "debrief" ||
+    session.phase === "retest";
   const baselineEvents = session.events.filter(
     (event) => event.scenarioId === "baseline_corridor_a",
   );

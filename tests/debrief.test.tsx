@@ -95,7 +95,9 @@ describe("Feature 4 observable trace and human debrief", () => {
 
     expect(screen.getByText("Comprobar el estado de la ruta")).toBeVisible();
     expect(
-      screen.queryByRole("heading", { name: "Retest no visto preparado" }),
+      screen.queryByRole("heading", {
+        name: "La ruta alterna habitual también está cerrada. ¿Qué haces?",
+      }),
     ).toBeNull();
 
     await user.click(
@@ -104,7 +106,9 @@ describe("Feature 4 observable trace and human debrief", () => {
       }),
     );
     expect(
-      screen.getByRole("heading", { name: "Retest no visto preparado" }),
+      screen.getByRole("heading", {
+        name: "La ruta alterna habitual también está cerrada. ¿Qué haces?",
+      }),
     ).toBeVisible();
 
     firstMount.unmount();
@@ -113,7 +117,9 @@ describe("Feature 4 observable trace and human debrief", () => {
       screen.getByRole("heading", { name: "Decisión Bajo Presión" }),
     ).toBeVisible();
     expect(
-      screen.queryByRole("heading", { name: "Retest no visto preparado" }),
+      screen.queryByRole("heading", {
+        name: "La ruta alterna habitual también está cerrada. ¿Qué haces?",
+      }),
     ).toBeNull();
   });
 });

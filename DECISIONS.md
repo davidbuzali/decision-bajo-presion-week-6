@@ -175,3 +175,33 @@ Start Feature 4 only: render the neutral baseline event trace, derive one adapti
 ### Tomorrow's first move
 
 Start Feature 5 only: pass the deterministic `ScenarioDefinition` into reusable scenario UI, record the unseen retest event through the same validator and reducer, preserve 3D/flat/pause parity, and stop at the comparison boundary.
+
+## 2026-09-16 — Feature 5 session close
+
+### Decisions made
+
+- Extract one reusable `ScenarioRehearsal` for baseline and retest so both paths share the exact option controls, input-mode classification, 3D/flat selection, reduced-motion behavior, status hierarchy, and decision confirmation.
+- Pass the deterministic retest `ScenarioDefinition` directly from the adaptive selection into that shared screen; add no random branch or client-generated variation.
+- Extend the primitive scene with scenario-driven flags for route obstruction, count attention, assistance need, and conflicting signs rather than building separate retest interfaces.
+- Preserve the Screen 4 labels **Escenario B — retest no visto**, **IA simulada — la decisión final es humana**, and **Requiere prueba física**.
+- Reset relative timing when the human debrief is confirmed, then subtract retest pause duration through the same session clock used for baseline.
+- Re-run the adaptive selector inside the reducer and accept only the event whose scenario and decision match the selected family. Reject wrong-family, incomplete-trace, duplicate, and post-completion events.
+- Move to the comparison phase only after the selected retest event is validated and appended; leave the actual comparison and physical-validation gate for Feature 7.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 46 tests passed across 9 files, including selected-family enforcement, wrong-family rejection, retest 3D/flat parity, pause/resume preservation, and the baseline → debrief → retest → comparison-boundary path.
+- Strict TypeScript build: passed.
+- Vite production build: passed; the Three.js dependency remains lazy-loaded outside the initial application bundle.
+- Browser QA: the route-checking baseline evidence selected the route-change retest, the WebGL scene showed a different obstruction, all three required Screen 4 safety labels were visible, pause/resume preserved the decision, and completion reached the comparison boundary.
+- Reduced-motion flat-view QA: the same route-change prompt, disruption, and option set rendered without WebGL.
+- Browser console showed only React Three Fiber's upstream Three.js `Clock` deprecation warning; the application produced no runtime errors.
+
+### Unresolved risk
+
+- The lazy-loaded 3D chunk remains approximately 896 kB minified (237 kB gzip); verify its real public load behavior during Deployment 1.
+
+### Tomorrow's first move
+
+Start Feature 6 only: implement explicit bounded voice activation as an adapter over the existing decision callback, discard recognized text immediately, preserve visible controls on every failure, and add M08/M09 coverage without starting the final comparison UI.

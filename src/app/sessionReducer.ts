@@ -1,4 +1,5 @@
 import { appendEvent } from "../domain/events";
+import { selectRetestScenario } from "../domain/adaptive";
 import {
   BASELINE_DECISION_IDS,
   type DecisionEvent,
@@ -72,32 +73,66 @@ export function sessionReducer(
         ? { ...state, phase: "baseline" }
         : state;
     case "record_event": {
-      if (state.phase !== "baseline") {
-        return state;
-      }
-
       const baselineEvents = state.events.filter(
         (event) => event.scenarioId === "baseline_corridor_a",
       );
-      const expectedDecisionId = BASELINE_DECISION_IDS[baselineEvents.length];
 
-      if (
-        !expectedDecisionId ||
-        action.event.scenarioId !== "baseline_corridor_a" ||
-        action.event.decisionId !== expectedDecisionId
-      ) {
-        return state;
+      if (state.phase === "baseline") {
+        const expectedDecisionId = BASELINE_DECISION_IDS[baselineEvents.length];
+
+        if (
+          !expectedDecisionId ||
+          action.event.scenarioId !== "baseline_corridor_a" ||
+          action.event.decisionId !== expectedDecisionId
+        ) {
+          return state;
+        }
+
+        const events = appendEvent(state.events, action.event);
+        return {
+          ...state,
+          events,
+          phase:
+            baselineEvents.length + 1 === BASELINE_DECISION_IDS.length
+              ? "debrief"
+              : "baseline",
+        };
       }
 
-      const events = appendEvent(state.events, action.event);
-      return {
-        ...state,
-        events,
-        phase:
-          baselineEvents.length + 1 === BASELINE_DECISION_IDS.length
-            ? "debrief"
-            : "baseline",
-      };
+      if (state.phase === "retest") {
+        const hasCompleteTrace = BASELINE_DECISION_IDS.every((decisionId) =>
+          baselineEvents.some((event) => event.decisionId === decisionId),
+        );
+        if (!hasCompleteTrace) {
+          return state;
+        }
+
+        const selection = selectRetestScenario(baselineEvents);
+        const retestEvents = state.events.filter(
+          (event) => event.scenarioId === selection.scenario.id,
+        );
+        const expectedDecision =
+          selection.scenario.decisions[retestEvents.length];
+
+        if (
+          !expectedDecision ||
+          action.event.scenarioId !== selection.scenario.id ||
+          action.event.decisionId !== expectedDecision.id
+        ) {
+          return state;
+        }
+
+        return {
+          ...state,
+          events: appendEvent(state.events, action.event),
+          phase:
+            retestEvents.length + 1 === selection.scenario.decisions.length
+              ? "comparison"
+              : "retest",
+        };
+      }
+
+      return state;
     }
     case "confirm_debrief": {
       if (state.phase !== "debrief") {

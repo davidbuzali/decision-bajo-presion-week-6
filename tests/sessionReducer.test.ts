@@ -168,4 +168,41 @@ describe("Feature 2 session reducer", () => {
     expect(confirmed.phase).toBe("retest");
     expect(confirmed.events).toEqual(debrief.events);
   });
+
+  it("accepts only the deterministically selected retest event", () => {
+    const forgedRetest: SessionState = {
+      ...createInitialSessionState(),
+      phase: "retest",
+    };
+    const routeEvent = event({
+      scenarioId: "retest_route_change_b",
+      decisionId: "retest_route_change",
+      actionCode: "follow_temporary_route",
+    });
+    expect(
+      sessionReducer(forgedRetest, {
+        type: "record_event",
+        event: routeEvent,
+      }),
+    ).toBe(forgedRetest);
+
+    const debrief = completedBaselineState();
+    const retest = sessionReducer(debrief, { type: "confirm_debrief" });
+    expect(
+      sessionReducer(retest, { type: "record_event", event: routeEvent }),
+    ).toBe(retest);
+
+    const selectedFamily = event({
+      scenarioId: "retest_conflicting_signs_b",
+      decisionId: "retest_conflicting_signs",
+      actionCode: "verify_conflicting_signs",
+    });
+    const comparison = sessionReducer(retest, {
+      type: "record_event",
+      event: selectedFamily,
+    });
+
+    expect(comparison.phase).toBe("comparison");
+    expect(comparison.events).toEqual([...retest.events, selectedFamily]);
+  });
 });

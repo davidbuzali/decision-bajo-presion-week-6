@@ -507,6 +507,31 @@ a:focus-visible {
   font-weight: 750;
 }
 
+.retest-notices {
+  margin: -0.35rem 0 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.retest-notices span {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #b9d8d3;
+  border-radius: 0.5rem;
+  color: var(--teal-dark);
+  background: #effaf7;
+  font-size: 0.72rem;
+  font-weight: 850;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
+}
+
+.retest-notices span:last-child {
+  border-color: #e2bd76;
+  color: #684b13;
+  background: var(--amber-soft);
+}
+
 .rehearsal-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);
@@ -605,6 +630,13 @@ a:focus-visible {
   font-size: 2rem;
 }
 
+.flat-scene__route--conflict {
+  right: 27%;
+  left: auto;
+  color: #3c2b0b;
+  background: #ffc55c;
+}
+
 .flat-scene__door {
   top: 16%;
   padding: 1.6rem 1rem;
@@ -626,6 +658,23 @@ a:focus-visible {
   color: #335e73;
   font-size: 1.65rem;
   letter-spacing: 0.35rem;
+}
+
+.flat-scene__people--attention {
+  color: #b36812;
+}
+
+.flat-scene__support {
+  position: absolute;
+  z-index: 1;
+  right: 27%;
+  bottom: 28%;
+  padding: 0.4rem 0.55rem;
+  border-radius: 0.4rem;
+  color: #563f13;
+  background: #ffc55c;
+  font-size: 0.72rem;
+  font-weight: 850;
 }
 
 .scene-status {

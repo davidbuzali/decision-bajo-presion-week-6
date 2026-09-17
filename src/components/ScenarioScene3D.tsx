@@ -1,7 +1,10 @@
 import { Canvas } from "@react-three/fiber";
 import type { MotionPreference } from "../app/sessionReducer";
+import type { ScenarioId } from "../domain/types";
+import { scenePresentation } from "./scenarioPresentation";
 
 type ScenarioScene3DProps = Readonly<{
+  scenarioId: ScenarioId;
   decisionIndex: number;
   motion: MotionPreference;
 }>;
@@ -21,9 +24,11 @@ function DirectionMarker({ position }: Readonly<{ position: [number, number, num
   );
 }
 
-function Corridor({ decisionIndex }: Readonly<{ decisionIndex: number }>) {
-  const routeBlocked = decisionIndex >= 1;
-  const countActive = decisionIndex >= 2;
+function Corridor({
+  scenarioId,
+  decisionIndex,
+}: Readonly<{ scenarioId: ScenarioId; decisionIndex: number }>) {
+  const presentation = scenePresentation(scenarioId, decisionIndex);
 
   return (
     <>
@@ -45,14 +50,16 @@ function Corridor({ decisionIndex }: Readonly<{ decisionIndex: number }>) {
 
       <mesh position={[0, 1.4, -3.55]}>
         <boxGeometry args={[1.7, 2.8, 0.18]} />
-        <meshStandardMaterial color={routeBlocked ? "#8f3439" : "#087f78"} />
+        <meshStandardMaterial
+          color={presentation.routeBlocked ? "#8f3439" : "#087f78"}
+        />
       </mesh>
       <mesh position={[0, 2.65, -3.42]}>
         <boxGeometry args={[2.1, 0.45, 0.12]} />
         <meshStandardMaterial color="#14213d" />
       </mesh>
 
-      {routeBlocked ? (
+      {presentation.routeBlocked ? (
         <group position={[0, 0.55, -2.75]}>
           <mesh position={[-0.75, 0, 0]} rotation={[0, 0, 0.32]}>
             <boxGeometry args={[1.7, 0.3, 0.35]} />
@@ -73,12 +80,27 @@ function Corridor({ decisionIndex }: Readonly<{ decisionIndex: number }>) {
         <DirectionMarker position={[0, 0, 0.08]} />
       </group>
 
+      {presentation.conflictingSigns ? (
+        <group position={[1.9, 1.55, -0.2]} rotation={[0, Math.PI, 0]}>
+          <mesh>
+            <boxGeometry args={[0.78, 0.78, 0.08]} />
+            <meshStandardMaterial color="#d89222" />
+          </mesh>
+          <DirectionMarker position={[0, 0, 0.08]} />
+        </group>
+      ) : null}
+
       {[[-0.85, 0.42, 1.2], [0, 0.42, 1.05], [0.85, 0.42, 1.2]].map(
         ([x, y, z], index) => (
           <mesh key={index} position={[x, y, z]}>
             <capsuleGeometry args={[0.2, 0.45, 5, 10]} />
             <meshStandardMaterial
-              color={countActive && index === 2 ? "#d89222" : "#335e73"}
+              color={
+                (presentation.countAttention && index === 2) ||
+                (presentation.assistanceNeeded && index === 1)
+                  ? "#d89222"
+                  : "#335e73"
+              }
             />
           </mesh>
         ),
@@ -87,7 +109,11 @@ function Corridor({ decisionIndex }: Readonly<{ decisionIndex: number }>) {
   );
 }
 
-export function ScenarioScene3D({ decisionIndex, motion }: ScenarioScene3DProps) {
+export function ScenarioScene3D({
+  scenarioId,
+  decisionIndex,
+  motion,
+}: ScenarioScene3DProps) {
   return (
     <div
       className="scene-canvas"
@@ -101,7 +127,7 @@ export function ScenarioScene3D({ decisionIndex, motion }: ScenarioScene3DProps)
         frameloop={motion === "reduced" ? "demand" : "always"}
         fallback={<p>La vista 3D no está disponible. Usa la vista plana.</p>}
       >
-        <Corridor decisionIndex={decisionIndex} />
+        <Corridor scenarioId={scenarioId} decisionIndex={decisionIndex} />
       </Canvas>
     </div>
   );

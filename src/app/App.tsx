@@ -1,14 +1,18 @@
 import { useReducer, useRef } from "react";
 import { BaselineRehearsal } from "../components/BaselineRehearsal";
 import { PauseOverlay } from "../components/PauseOverlay";
+import { ScenarioRehearsal } from "../components/ScenarioRehearsal";
 import { StartScreen } from "../components/StartScreen";
 import { TraceDebrief } from "../components/TraceDebrief";
 import { createDecisionEvent } from "../domain/actions";
 import { selectRetestScenario } from "../domain/adaptive";
+import { BASELINE_SCENARIO } from "../domain/scenarios";
 import {
   BASELINE_DECISION_IDS,
   type ActionCode,
+  type DecisionEvent,
   type InputMode,
+  type ScenarioDefinition,
 } from "../domain/types";
 import {
   createInitialSessionState,
@@ -25,7 +29,7 @@ export function App() {
   const pauseStartedAtRef = useRef<number | null>(null);
   const pausedDurationRef = useRef(0);
 
-  const canPause = session.phase === "baseline";
+  const canPause = session.phase === "baseline" || session.phase === "retest";
   const baselineEvents = session.events.filter(
     (event) => event.scenarioId === "baseline_corridor_a",
   );
@@ -33,6 +37,11 @@ export function App() {
     baselineEvents.length === BASELINE_DECISION_IDS.length
       ? selectRetestScenario(baselineEvents)
       : null;
+  const retestEvents = adaptiveSelection
+    ? session.events.filter(
+        (event) => event.scenarioId === adaptiveSelection.scenario.id,
+      )
+    : [];
 
   function startSession() {
     startedAtRef.current = performance.now();
@@ -65,16 +74,29 @@ export function App() {
     dispatch({ type: "exit" });
   }
 
-  function recordBaselineDecision(actionCode: ActionCode, inputMode: InputMode) {
-    const decision = BASELINE_DECISION_IDS[baselineEvents.length];
+  function confirmDebrief() {
+    startedAtRef.current = performance.now();
+    pauseStartedAtRef.current = null;
+    pausedDurationRef.current = 0;
+    dispatch({ type: "confirm_debrief" });
+  }
+
+  function recordScenarioDecision(
+    scenario: ScenarioDefinition,
+    scenarioEvents: readonly DecisionEvent[],
+    expectedPhase: "baseline" | "retest",
+    actionCode: ActionCode,
+    inputMode: InputMode,
+  ) {
+    const decision = scenario.decisions[scenarioEvents.length];
     const startedAt = startedAtRef.current;
-    if (!decision || startedAt === null || session.phase !== "baseline") {
+    if (!decision || startedAt === null || session.phase !== expectedPhase) {
       return;
     }
 
     const event = createDecisionEvent({
-      scenarioId: "baseline_corridor_a",
-      decisionId: decision,
+      scenarioId: scenario.id,
+      decisionId: decision.id,
       candidateAction: actionCode,
       relativeTimeMs: performance.now() - startedAt - pausedDurationRef.current,
       inputMode,
@@ -93,8 +115,10 @@ export function App() {
         : session.phase === "debrief"
           ? "Escenario inicial completado"
           : session.phase === "retest"
-            ? "Debrief confirmado; retest pendiente"
-          : "Ensayo iniciado";
+            ? "Retest no visto en curso"
+            : session.phase === "comparison"
+              ? "Retest no visto completado"
+              : "Ensayo iniciado";
 
   return (
     <div className="app-shell" data-motion={session.settings.motion}>
@@ -149,26 +173,50 @@ export function App() {
           events={baselineEvents}
           motion={session.settings.motion}
           view={session.settings.view}
-          onDecision={recordBaselineDecision}
+          onDecision={(actionCode, inputMode) =>
+            recordScenarioDecision(
+              BASELINE_SCENARIO,
+              baselineEvents,
+              "baseline",
+              actionCode,
+              inputMode,
+            )
+          }
         />
       ) : session.phase === "debrief" && adaptiveSelection ? (
         <TraceDebrief
           events={baselineEvents}
           behaviorCode={adaptiveSelection.behaviorCode}
-          onConfirm={() => dispatch({ type: "confirm_debrief" })}
+          onConfirm={confirmDebrief}
         />
-      ) : session.phase === "retest" ? (
+      ) : session.phase === "retest" && adaptiveSelection ? (
+        <ScenarioRehearsal
+          scenario={adaptiveSelection.scenario}
+          events={retestEvents}
+          motion={session.settings.motion}
+          view={session.settings.view}
+          onDecision={(actionCode, inputMode) =>
+            recordScenarioDecision(
+              adaptiveSelection.scenario,
+              retestEvents,
+              "retest",
+              actionCode,
+              inputMode,
+            )
+          }
+        />
+      ) : session.phase === "comparison" ? (
         <main id="main-content" className="session-page">
           <section className="session-placeholder" aria-labelledby="session-title">
             <div className="session-meta">
-              <span>Paso 4 de 5</span>
-              <span>Debrief confirmado en esta sesión</span>
+              <span>Paso 5 de 5</span>
+              <span>Retest no visto completado</span>
             </div>
-            <p className="eyebrow">Siguiente incremento</p>
-            <h1 id="session-title">Retest no visto preparado</h1>
+            <p className="eyebrow">Decisión registrada</p>
+            <h1 id="session-title">Comparación preparada</h1>
             <p>
-              El escenario adaptativo reutilizará este flujo de decisiones en
-              Feature 5. Sus condiciones y opciones todavía no se muestran.
+              La evidencia del escenario inicial y del retest está en memoria. La
+              comparación y la validación física se incorporarán en Feature 7.
             </p>
           </section>
         </main>

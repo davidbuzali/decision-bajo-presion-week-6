@@ -93,3 +93,29 @@ Start Feature 1 only: scaffold the Vite/React/TypeScript project, add the pure d
 ### Tomorrow's first move
 
 Start Feature 2 only: implement the safe Spanish start screen, in-memory session reducer, motion/view preferences, persistent pause control shell, and accessibility foundations without beginning the 3D scenario.
+
+## 2026-09-16 — Feature 2 session close
+
+### Decisions made
+
+- State the product boundary before entry: this is a screen-based educational rehearsal that records predefined decisions and relative timing, not identity, emotion, competence, or real-world certification.
+- Keep motion, view, and optional-voice preferences only in the React session reducer; do not use local storage, cookies, accounts, analytics, or a backend.
+- Default to normal motion, screen-based 3D, and voice disabled. Offer reduced motion and a flat-view path before the rehearsal starts.
+- Treat the voice checkbox as preparation only. It never requests microphone permission; the later explicit **Escuchar comando** action will own that request.
+- Disclose that a browser provider may process speech while making clear that this application stores neither audio nor transcripts.
+- Preserve the active scenario phase and evidence on pause. Pausing creates no event; exiting without saving resets settings, phase, and evidence to fresh defaults.
+- Move focus into the pause dialog so keyboard users immediately reach the resume action.
+- Stop at the Feature 2 boundary: the baseline screen remains an honest placeholder until the 3D and flat-view implementations are built together in Feature 3.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 32 tests passed across 6 files, including reducer transitions, in-memory reset, zero microphone calls, keyboard start/pause/resume, pause focus, and clean exit.
+- Strict TypeScript build: passed.
+- Vite production build: passed.
+- Browser QA: desktop start, preference handoff, paused dialog, and a 390 × 844 narrow viewport were inspected; the Spanish copy, semantic controls, focus target, and responsive layout remained usable.
+- M08, M10, and the Feature 2 portions of M11 and M13 now have coverage. Voice error fallback and complete-flow assertions remain assigned to their later features.
+
+### Tomorrow's first move
+
+Start Feature 3 only: implement the three-decision baseline with primitive 3D geometry and exact flat-view parity, route every interaction through the existing validator and event contract, and preserve the Feature 2 pause and accessibility behavior.

@@ -173,6 +173,8 @@ export function App() {
           events={baselineEvents}
           motion={session.settings.motion}
           view={session.settings.view}
+          voiceEnabled={session.settings.voiceEnabled}
+          onVoicePause={pauseSession}
           onDecision={(actionCode, inputMode) =>
             recordScenarioDecision(
               BASELINE_SCENARIO,
@@ -195,6 +197,8 @@ export function App() {
           events={retestEvents}
           motion={session.settings.motion}
           view={session.settings.view}
+          voiceEnabled={session.settings.voiceEnabled}
+          onVoicePause={pauseSession}
           onDecision={(actionCode, inputMode) =>
             recordScenarioDecision(
               adaptiveSelection.scenario,

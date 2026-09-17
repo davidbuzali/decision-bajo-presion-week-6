@@ -7,6 +7,8 @@ type BaselineRehearsalProps = Readonly<{
   events: readonly DecisionEvent[];
   motion: MotionPreference;
   view: ViewPreference;
+  voiceEnabled?: boolean;
+  onVoicePause?: () => void;
   onDecision: (actionCode: ActionCode, inputMode: InputMode) => void;
 }>;
 

@@ -7,6 +7,7 @@ import type {
   ScenarioDefinition,
 } from "../domain/types";
 import { scenePresentation, sceneStatus } from "./scenarioPresentation";
+import { VoiceControl } from "./VoiceControl";
 
 const ScenarioScene3D = lazy(async () => {
   const module = await import("./ScenarioScene3D");
@@ -18,6 +19,8 @@ export type ScenarioRehearsalProps = Readonly<{
   events: readonly DecisionEvent[];
   motion: MotionPreference;
   view: ViewPreference;
+  voiceEnabled?: boolean;
+  onVoicePause?: () => void;
   onDecision: (actionCode: ActionCode, inputMode: InputMode) => void;
 }>;
 
@@ -26,6 +29,8 @@ export function ScenarioRehearsal({
   events,
   motion,
   view,
+  voiceEnabled = false,
+  onVoicePause,
   onDecision,
 }: ScenarioRehearsalProps) {
   const decisionIndex = events.length;
@@ -172,6 +177,14 @@ export function ScenarioRehearsal({
               </button>
             ))}
           </div>
+          {voiceEnabled ? (
+            <VoiceControl
+              key={decision.id}
+              decisionId={decision.id}
+              onDecision={onDecision}
+              onPause={() => onVoicePause?.()}
+            />
+          ) : null}
           <p className="keyboard-hint">
             Usa Tab para recorrer y Enter o Espacio para elegir.
           </p>

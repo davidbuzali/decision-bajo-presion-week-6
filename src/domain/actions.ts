@@ -24,6 +24,9 @@ export const VOICE_PHRASE_LIMIT = 64;
 const voiceActionsByDecision: Partial<
   Readonly<Record<DecisionId, Readonly<Record<string, ActionCode>>>>
 > = {
+  baseline_alert: {
+    "esperar instruccion": "observe_and_follow_instruction",
+  },
   baseline_blocked_exit: {
     "ruta alterna": "verify_alternate_route",
     "esperar instruccion": "wait_without_communicating",

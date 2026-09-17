@@ -205,3 +205,30 @@ Start Feature 5 only: pass the deterministic `ScenarioDefinition` into reusable 
 ### Tomorrow's first move
 
 Start Feature 6 only: implement explicit bounded voice activation as an adapter over the existing decision callback, discard recognized text immediately, preserve visible controls on every failure, and add M08/M09 coverage without starting the final comparison UI.
+
+## 2026-09-16 — Feature 6 session close
+
+### Decisions made
+
+- Implement browser speech recognition as an optional adapter over the existing `onDecision` callback, never as a separate evidence or business-logic path.
+- Instantiate and start recognition only after the explicit **Escuchar comando** action. Enabling voice at the start screen or loading a scenario performs no microphone or recognition action.
+- Configure one-shot recognition for `es-MX`, non-continuous results, no interim transcript, and one alternative.
+- Normalize and accept only the five documented commands through the existing current-decision allow list: `ruta alterna`, `reportar persona`, `pedir apoyo`, `esperar instrucción`, and `pausar`.
+- Map recognized text immediately to an allow-listed command and return only the command object; expose, render, log, and store no transcript.
+- Route recognized decisions through the same validator and reducer with `inputMode: "voice"`; route `pausar` to the existing session pause control without creating evidence.
+- Treat unsupported APIs, permission denial, network failure, generic recognition failure, empty results, unrelated phrases, and overlong phrases as neutral non-events while keeping every visible decision button and keyboard path usable.
+- Repeat the browser-provider disclosure beside the voice control without claiming offline recognition.
+- Stop before Feature 7: no comparison statement or digital physical-validation closure was added.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 61 tests passed across 10 files, including command normalization, one-shot `es-MX` configuration, zero activation before the explicit button, transcript-free results, pointer/keyboard/voice action parity, voice pause, unrelated phrase rejection, permission/network/recognition failures, unsupported-browser fallback, and preserved visible controls.
+- Strict TypeScript build: passed.
+- Vite production build: passed; the Three.js scene remains lazy-loaded.
+- Browser QA: opted into voice, entered a flat baseline, verified that the voice control and provider disclosure appeared alongside all three visible actions, and confirmed that the page made no request before **Escuchar comando**. The microphone action itself was deliberately not triggered during visual QA.
+- Browser console: no errors or warnings during the voice opt-in journey.
+
+### Tomorrow's first move
+
+Start Feature 7 only: render exactly one approved comparison statement for the targeted behavior, show the immutable **Pendiente de validación física** gate and physical micro-drill instruction, then add the complete-flow M05/M06/M12/M13 assertions.

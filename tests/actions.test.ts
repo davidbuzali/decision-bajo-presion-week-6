@@ -44,6 +44,17 @@ describe("M03 shared action validation", () => {
     );
   });
 
+  it.each([
+    ["baseline_alert", "esperar instrucción", "observe_and_follow_instruction"],
+    ["baseline_accountability", "reportar persona", "report_and_request_support"],
+    ["retest_accessible_assistance", "pedir apoyo", "coordinate_accessible_support"],
+  ] as const)(
+    "maps %s command %j through the current decision allow list",
+    (decisionId, phrase, actionCode) => {
+      expect(mapVoicePhrase(decisionId, phrase)).toBe(actionCode);
+    },
+  );
+
   it("rejects a valid decision paired with the wrong scenario", () => {
     expect(
       createDecisionEvent({

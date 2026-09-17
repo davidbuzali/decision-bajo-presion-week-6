@@ -748,6 +748,236 @@ a:focus-visible {
   font-weight: 700;
 }
 
+.trace-page {
+  width: min(1220px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(2.5rem, 6vw, 5.5rem) 0;
+}
+
+.trace-heading {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.trace-heading > div {
+  max-width: 760px;
+}
+
+.trace-heading h1 {
+  margin: 0.4rem 0 0.8rem;
+  font-size: clamp(2.2rem, 5vw, 4.7rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.trace-heading > div > p:last-child {
+  max-width: 64ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.trace-count {
+  flex: 0 0 auto;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  color: var(--teal-dark);
+  background: var(--teal-soft);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.trace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr);
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.event-card,
+.adaptive-card,
+.human-card {
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  background: white;
+  box-shadow: 0 1rem 3rem rgb(20 33 61 / 8%);
+}
+
+.event-card {
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.card-heading h2,
+.adaptive-card h2,
+.human-card h2 {
+  margin: 0.35rem 0 0;
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  letter-spacing: -0.035em;
+}
+
+.event-list {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  gap: 0.9rem;
+}
+
+.event-list li:not(:last-child) {
+  padding-bottom: 1.4rem;
+}
+
+.event-list li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 2.4rem;
+  bottom: 0.2rem;
+  left: 1.25rem;
+  width: 1px;
+  background: #bad6d2;
+}
+
+.event-index {
+  width: 2.6rem;
+  height: 2.6rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: white;
+  background: var(--navy);
+  font-size: 0.8rem;
+  font-weight: 850;
+}
+
+.event-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.event-topline h3,
+.event-list p,
+.event-list small {
+  margin: 0;
+}
+
+.event-topline h3 {
+  font-size: 0.93rem;
+}
+
+.event-topline time {
+  color: var(--teal-dark);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.event-list p {
+  margin-top: 0.28rem;
+  color: #334154;
+  line-height: 1.45;
+}
+
+.event-list small {
+  margin-top: 0.35rem;
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.debrief-column {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.adaptive-card,
+.human-card {
+  padding: clamp(1.35rem, 3vw, 2rem);
+}
+
+.adaptive-card {
+  border-color: #8dc7bf;
+  background: linear-gradient(145deg, #effaf7, white 72%);
+}
+
+.adaptive-label {
+  width: fit-content;
+  margin: 0;
+  padding: 0.42rem 0.62rem;
+  border-radius: 0.45rem;
+  color: white;
+  background: var(--teal-dark);
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.behavior-focus {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  border: 1px solid #b7dcd6;
+  border-radius: 0.9rem;
+  background: rgb(255 255 255 / 75%);
+}
+
+.behavior-focus > span {
+  color: var(--teal);
+  font-size: 1.35rem;
+  font-weight: 900;
+}
+
+.behavior-focus h3,
+.behavior-focus p,
+.adaptive-note,
+.human-card > p,
+.human-card > small {
+  margin: 0;
+}
+
+.behavior-focus h3 {
+  font-size: 1rem;
+}
+
+.behavior-focus p,
+.adaptive-note,
+.human-card > p,
+.human-card > small {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.behavior-focus p {
+  margin-top: 0.25rem;
+}
+
+.adaptive-note {
+  margin-top: 1rem;
+}
+
+.human-card > p {
+  margin-top: 0.75rem;
+}
+
+.human-card > small {
+  margin-top: 0.8rem;
+  display: block;
+  font-size: 0.72rem;
+}
+
 [data-motion="reduced"] *,
 [data-motion="reduced"] *::before,
 [data-motion="reduced"] *::after {
@@ -814,6 +1044,15 @@ a:focus-visible {
   .scene-canvas,
   .flat-scene {
     height: min(68vw, 440px);
+  }
+
+  .trace-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .trace-layout {
+    grid-template-columns: 1fr;
   }
 }
 

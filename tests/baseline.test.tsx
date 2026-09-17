@@ -119,9 +119,11 @@ describe("Feature 3 baseline rehearsal", () => {
       }),
     );
     expect(
-      screen.getByRole("heading", { name: "Decisión registrada" }),
+      screen.getByRole("heading", {
+        name: "Lo que ocurrió en el escenario inicial",
+      }),
     ).toBeVisible();
-    expect(screen.getByText("3 decisiones registradas")).toBeVisible();
+    expect(screen.getByText("3 eventos observables")).toBeVisible();
     expect(screen.queryByRole("button", { name: /Pausar y salir/i })).toBeNull();
   });
 

@@ -29,6 +29,7 @@ export type SessionAction =
   | Readonly<{ type: "set_voice_enabled"; enabled: boolean }>
   | Readonly<{ type: "start" }>
   | Readonly<{ type: "record_event"; event: DecisionEvent }>
+  | Readonly<{ type: "confirm_debrief" }>
   | Readonly<{ type: "pause" }>
   | Readonly<{ type: "resume" }>
   | Readonly<{ type: "exit" }>;
@@ -97,6 +98,20 @@ export function sessionReducer(
             ? "debrief"
             : "baseline",
       };
+    }
+    case "confirm_debrief": {
+      if (state.phase !== "debrief") {
+        return state;
+      }
+
+      const baselineEvents = state.events.filter(
+        (event) => event.scenarioId === "baseline_corridor_a",
+      );
+      const hasCompleteTrace = BASELINE_DECISION_IDS.every((decisionId) =>
+        baselineEvents.some((event) => event.decisionId === decisionId),
+      );
+
+      return hasCompleteTrace ? { ...state, phase: "retest" } : state;
     }
     case "pause":
       return state.phase === "baseline" || state.phase === "retest"

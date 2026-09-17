@@ -2,7 +2,9 @@ import { useReducer, useRef } from "react";
 import { BaselineRehearsal } from "../components/BaselineRehearsal";
 import { PauseOverlay } from "../components/PauseOverlay";
 import { StartScreen } from "../components/StartScreen";
+import { TraceDebrief } from "../components/TraceDebrief";
 import { createDecisionEvent } from "../domain/actions";
+import { selectRetestScenario } from "../domain/adaptive";
 import {
   BASELINE_DECISION_IDS,
   type ActionCode,
@@ -23,10 +25,14 @@ export function App() {
   const pauseStartedAtRef = useRef<number | null>(null);
   const pausedDurationRef = useRef(0);
 
-  const canPause = session.phase === "baseline" || session.phase === "retest";
+  const canPause = session.phase === "baseline";
   const baselineEvents = session.events.filter(
     (event) => event.scenarioId === "baseline_corridor_a",
   );
+  const adaptiveSelection =
+    baselineEvents.length === BASELINE_DECISION_IDS.length
+      ? selectRetestScenario(baselineEvents)
+      : null;
 
   function startSession() {
     startedAtRef.current = performance.now();
@@ -86,6 +92,8 @@ export function App() {
         ? "Sesión pausada"
         : session.phase === "debrief"
           ? "Escenario inicial completado"
+          : session.phase === "retest"
+            ? "Debrief confirmado; retest pendiente"
           : "Ensayo iniciado";
 
   return (
@@ -143,18 +151,24 @@ export function App() {
           view={session.settings.view}
           onDecision={recordBaselineDecision}
         />
-      ) : session.phase === "debrief" ? (
+      ) : session.phase === "debrief" && adaptiveSelection ? (
+        <TraceDebrief
+          events={baselineEvents}
+          behaviorCode={adaptiveSelection.behaviorCode}
+          onConfirm={() => dispatch({ type: "confirm_debrief" })}
+        />
+      ) : session.phase === "retest" ? (
         <main id="main-content" className="session-page">
           <section className="session-placeholder" aria-labelledby="session-title">
             <div className="session-meta">
-              <span>Paso 2 de 5</span>
-              <span>3 decisiones registradas</span>
+              <span>Paso 4 de 5</span>
+              <span>Debrief confirmado en esta sesión</span>
             </div>
-            <p className="eyebrow">Escenario inicial completo</p>
-            <h1 id="session-title">Decisión registrada</h1>
+            <p className="eyebrow">Siguiente incremento</p>
+            <h1 id="session-title">Retest no visto preparado</h1>
             <p>
-              Las tres acciones observables están en memoria. La secuencia y el
-              debrief humano se incorporarán en el siguiente incremento.
+              El escenario adaptativo reutilizará este flujo de decisiones en
+              Feature 5. Sus condiciones y opciones todavía no se muestran.
             </p>
           </section>
         </main>

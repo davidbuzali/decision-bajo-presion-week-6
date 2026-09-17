@@ -6,7 +6,7 @@ The planned product combines a screen-based 3D simulation, transparent adaptive 
 
 ## Current stage
 
-Features 1–3 complete: the Vite/React/TypeScript foundation and pure domain contracts are joined by a safe Spanish start screen, in-memory accessibility preferences, an accessible pause-and-exit shell, and the complete three-decision baseline in both primitive 3D and equivalent flat views. The event trace and human-debrief flow begin with Feature 4 and remain an explicit placeholder.
+Features 1–4 complete: the Vite/React/TypeScript foundation and pure domain contracts now support a safe Spanish start, in-memory accessibility preferences, an accessible pause-and-exit shell, the complete three-decision baseline in primitive 3D and equivalent flat views, a neutral event trace, deterministic behavior targeting, and a required human-debrief acknowledgment. The unseen retest begins with Feature 5 and remains intentionally hidden behind a placeholder.
 
 - Product packet: [`docs/PACKET.md`](docs/PACKET.md)
 - Implementation prompt: [`docs/IMPLEMENTATION_PROMPT.md`](docs/IMPLEMENTATION_PROMPT.md)

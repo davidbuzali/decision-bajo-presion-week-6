@@ -149,3 +149,29 @@ Start Feature 3 only: implement the three-decision baseline with primitive 3D ge
 ### Tomorrow's first move
 
 Start Feature 4 only: render the neutral baseline event trace, derive one adaptive behavior target, label the recommendation as simulated AI with a human final decision, and require the in-memory human-debrief acknowledgment before the retest.
+
+## 2026-09-16 — Feature 4 session close
+
+### Decisions made
+
+- Present the baseline evidence as a neutral chronological sequence containing only the situation label, selected allow-listed action, relative time, and input mode.
+- Derive exactly one behavior target from the validated baseline events with the existing deterministic selector; do not expose the selected retest scenario, disruption, options, or intended response.
+- Label the target **IA simulada — la decisión final es humana** and explain that it is a proposed focus for a responsible person's debrief, not an automated judgment.
+- Use behavior-focused, non-diagnostic language and show no score, probability, trait, readiness rating, or competence label.
+- Require the explicit action **Confirmo que ocurrió el debrief humano** before changing the session to the retest phase.
+- Treat the acknowledgment as an in-memory navigation gate only. It records no identity, proof, professional participation, or persistent completion state.
+- Validate that the trace contains every baseline decision before accepting the acknowledgment, even if an invalid state is supplied outside the normal reducer path.
+- Stop at a Feature 5 boundary that confirms the gate opened but hides every retest condition and option.
+
+### Verification
+
+- ESLint: passed with no findings.
+- Vitest: 42 tests passed across 8 files, including neutral trace rendering, relative-time formatting, hidden retest options, deterministic target integration, complete-trace acknowledgment gating, unchanged evidence, and reset on remount.
+- Strict TypeScript build: passed.
+- Vite production build: passed; the 3D engine remains isolated in its lazy-loaded chunk.
+- Browser QA: completed a baseline that targets route checking, verified the three-event trace and exact simulated-AI/human-decision label, confirmed the debrief gate, and inspected the responsive layout at 390 × 844.
+- Browser console: no application errors or warnings during the flat-view Feature 4 journey.
+
+### Tomorrow's first move
+
+Start Feature 5 only: pass the deterministic `ScenarioDefinition` into reusable scenario UI, record the unseen retest event through the same validator and reducer, preserve 3D/flat/pause parity, and stop at the comparison boundary.

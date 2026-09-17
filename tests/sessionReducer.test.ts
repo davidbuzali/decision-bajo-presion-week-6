@@ -4,7 +4,18 @@ import {
   sessionReducer,
   type SessionState,
 } from "../src/app/sessionReducer";
-import { event } from "./fixtures";
+import { event, successfulBaseline } from "./fixtures";
+
+function completedBaselineState(): SessionState {
+  let state = sessionReducer(createInitialSessionState(), { type: "start" });
+  for (const baselineEvent of successfulBaseline()) {
+    state = sessionReducer(state, {
+      type: "record_event",
+      event: baselineEvent,
+    });
+  }
+  return state;
+}
 
 describe("Feature 2 session reducer", () => {
   it("starts with accessible defaults and voice disabled", () => {
@@ -132,5 +143,29 @@ describe("Feature 2 session reducer", () => {
     expect(
       sessionReducer(afterFirst, { type: "record_event", event: first }),
     ).toBe(afterFirst);
+  });
+
+  it("requires a completed baseline before confirming the human debrief", () => {
+    const active = sessionReducer(createInitialSessionState(), { type: "start" });
+    expect(sessionReducer(active, { type: "confirm_debrief" })).toBe(active);
+
+    const duplicateEvent = event({
+      decisionId: "baseline_alert",
+      actionCode: "observe_and_follow_instruction",
+    });
+    const incompleteTrace: SessionState = {
+      ...createInitialSessionState(),
+      phase: "debrief",
+      events: [duplicateEvent, duplicateEvent, duplicateEvent],
+    };
+    expect(
+      sessionReducer(incompleteTrace, { type: "confirm_debrief" }),
+    ).toBe(incompleteTrace);
+
+    const debrief = completedBaselineState();
+    const confirmed = sessionReducer(debrief, { type: "confirm_debrief" });
+
+    expect(confirmed.phase).toBe("retest");
+    expect(confirmed.events).toEqual(debrief.events);
   });
 });
